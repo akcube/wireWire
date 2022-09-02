@@ -34,7 +34,6 @@ class HomePageState extends State<HomePage> {
           thingSpeakData.add(EntryModel.fromMap(entry));
         });
       }
-      print(thingSpeakData.length);
     } catch (err) {}
   }
 

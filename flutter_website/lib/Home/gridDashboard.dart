@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_website/Charts/blood_pressure.dart';
+import 'package:flutter_website/Charts/heart_rate.dart';
+import 'package:flutter_website/Charts/oxygen.dart';
+import 'package:flutter_website/Charts/skin_conductivity.dart';
+import 'package:flutter_website/Charts/temperature.dart';
 import 'package:flutter_website/model/entry_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -22,27 +26,27 @@ class GridDashboard extends StatelessWidget {
         subtitle: "Check your heart rate",
         event: "",
         img: "assets/home/heart.png",
-        route: BloodPressureScreen(thingSpeakData: thingSpeakData));
+        route: HeartRateScreen(thingSpeakData: thingSpeakData));
 
     Items item3 = Items(
         title: "Temperature",
         subtitle: "Check your temperature",
         event: "",
         img: "assets/home/temperature.png",
-        route: BloodPressureScreen(thingSpeakData: thingSpeakData));
+        route: TemperatureScreen(thingSpeakData: thingSpeakData));
 
     Items item4 = Items(
         title: "SPO2",
         subtitle: "Check your oxygen levels",
         event: "",
         img: "assets/home/oxygen.png",
-        route: BloodPressureScreen(thingSpeakData: thingSpeakData));
+        route: OxygenScreen(thingSpeakData: thingSpeakData));
     Items item5 = Items(
         title: "Skin Conductivity",
         subtitle: "Check your skin resistance",
         event: "",
         img: "assets/home/resistance.png",
-        route: BloodPressureScreen(thingSpeakData: thingSpeakData));
+        route: SkinConductivityScreen(thingSpeakData: thingSpeakData));
     List<Items> myList = [
       item1,
       item2,

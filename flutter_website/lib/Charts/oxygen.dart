@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter_website/model/entry_model.dart';
 
-class BloodPressureScreen extends StatefulWidget {
+class OxygenScreen extends StatefulWidget {
   List<EntryModel> thingSpeakData;
-  BloodPressureScreen({Key? key, required this.thingSpeakData})
-      : super(key: key);
+  OxygenScreen({Key? key, required this.thingSpeakData}) : super(key: key);
 
   @override
-  _BloodPressureScreenState createState() => _BloodPressureScreenState();
+  _OxygenScreenState createState() => _OxygenScreenState();
 }
 
-class _BloodPressureScreenState extends State<BloodPressureScreen> {
+class _OxygenScreenState extends State<OxygenScreen> {
   late TooltipBehavior _tooltipBehavior;
   late ZoomPanBehavior _zoomPanBehavior;
   @override
@@ -21,7 +20,7 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
         elevation: 0,
         backgroundColor: const Color(0xFF00564D),
       ),
-      body: BloodPressureChart(),
+      body: OxygenScreen(),
     );
   }
 
@@ -33,9 +32,9 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
         ZoomPanBehavior(enablePinching: true, enableDoubleTapZooming: true);
   }
 
-  Widget BloodPressureChart() {
+  Widget OxygenScreen() {
     return SfCartesianChart(
-      title: ChartTitle(text: 'Blood Pressure Chart (mmHg) \n'),
+      title: ChartTitle(text: 'SpO2 Chart (%) \n'),
       legend:
           Legend(isVisible: true, overflowMode: LegendItemOverflowMode.wrap),
       tooltipBehavior: _tooltipBehavior,
@@ -44,14 +43,7 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
         LineSeries<EntryModel, DateTime>(
           dataSource: widget.thingSpeakData,
           xValueMapper: (EntryModel data, _) => data.createTime,
-          yValueMapper: (EntryModel data, _) => data.systolic,
-          dataLabelSettings: const DataLabelSettings(isVisible: false),
-          enableTooltip: true,
-        ),
-        LineSeries<EntryModel, DateTime>(
-          dataSource: widget.thingSpeakData,
-          xValueMapper: (EntryModel data, _) => data.createTime,
-          yValueMapper: (EntryModel data, _) => data.diastolic,
+          yValueMapper: (EntryModel data, _) => data.oxygen,
           dataLabelSettings: const DataLabelSettings(isVisible: false),
           enableTooltip: true,
         ),
