@@ -1,7 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../model/entry_model.dart';
 import 'gridDashboard.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,6 +18,24 @@ class HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    fetchThingSpeakData();
+  }
+
+  Uri thingSpeakURL = Uri.parse(
+      'https://api.thingspeak.com/channels/${dotenv.env['THINGSPEAK_CHANNEL']!}/feeds.json?');
+  List<EntryModel> thingSpeakData = [];
+
+  void fetchThingSpeakData() async {
+    try {
+      final response = await get(thingSpeakURL);
+      final jsonData = jsonDecode(response.body)['feeds'];
+      for (var entry in jsonData) {
+        setState(() {
+          thingSpeakData.add(EntryModel.fromMap(entry));
+        });
+      }
+      print(thingSpeakData.length);
+    } catch (err) {}
   }
 
   @override
@@ -66,7 +88,9 @@ class HomePageState extends State<HomePage> {
             ),
           ),
           const SizedBox(height: 40),
-          GridDashboard(),
+          GridDashboard(
+            thingSpeakData: thingSpeakData,
+          ),
         ],
       ),
     );

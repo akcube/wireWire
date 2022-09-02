@@ -1,45 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_website/Charts/blood_pressure.dart';
+import 'package:flutter_website/model/entry_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // ignore: must_be_immutable, use_key_in_widget_constructors
 class GridDashboard extends StatelessWidget {
-  GridDashboard({Key? key}) : super(key: key);
-  Items item1 = Items(
-      title: "Blood Pressure",
-      subtitle: "Check BP",
-      event: "",
-      img: "assets/home/blood.png",
-      route: 'blood_pressure');
-
-  Items item2 = Items(
-      title: "Heart Rate",
-      subtitle: "Check your heart rate",
-      event: "",
-      img: "assets/home/heart.png",
-      route: 'heart_rate');
-
-  Items item3 = Items(
-      title: "Temperature",
-      subtitle: "Check your temperature",
-      event: "",
-      img: "assets/home/temperature.png",
-      route: 'temperature');
-
-  Items item4 = Items(
-      title: "SPO2",
-      subtitle: "Check your oxygen levels",
-      event: "",
-      img: "assets/home/oxygen.png",
-      route: 'oxygen_level');
-  Items item5 = Items(
-      title: "Skin Conductivity",
-      subtitle: "Check your skin resistance",
-      event: "",
-      img: "assets/home/resistance.png",
-      route: 'skin_conductivity');
+  final List<EntryModel> thingSpeakData;
+  GridDashboard({Key? key, required this.thingSpeakData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Items item1 = Items(
+        title: "Blood Pressure",
+        subtitle: "Check BP",
+        event: "",
+        img: "assets/home/blood.png",
+        route: BloodPressureScreen(thingSpeakData: thingSpeakData));
+
+    Items item2 = Items(
+        title: "Heart Rate",
+        subtitle: "Check your heart rate",
+        event: "",
+        img: "assets/home/heart.png",
+        route: BloodPressureScreen(thingSpeakData: thingSpeakData));
+
+    Items item3 = Items(
+        title: "Temperature",
+        subtitle: "Check your temperature",
+        event: "",
+        img: "assets/home/temperature.png",
+        route: BloodPressureScreen(thingSpeakData: thingSpeakData));
+
+    Items item4 = Items(
+        title: "SPO2",
+        subtitle: "Check your oxygen levels",
+        event: "",
+        img: "assets/home/oxygen.png",
+        route: BloodPressureScreen(thingSpeakData: thingSpeakData));
+    Items item5 = Items(
+        title: "Skin Conductivity",
+        subtitle: "Check your skin resistance",
+        event: "",
+        img: "assets/home/resistance.png",
+        route: BloodPressureScreen(thingSpeakData: thingSpeakData));
     List<Items> myList = [
       item1,
       item2,
@@ -67,7 +70,9 @@ class GridDashboard extends StatelessWidget {
             ),
             child: InkWell(
               onTap: () {
-                Navigator.pushNamed(context, data.route);
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return data.route;
+                }));
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -121,7 +126,7 @@ class Items {
   String subtitle;
   String event;
   String img;
-  String route;
+  Widget route;
   Items(
       {required this.title,
       required this.subtitle,
