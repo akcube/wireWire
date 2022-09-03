@@ -27,16 +27,16 @@ const int gsr_pin = 13; //HAVEN'T GOTTEN IT TO WORK ON ESP32 TILL NOW
 auto mx = pulse_init(mfio_pin, reset_pin, 250);
 auto tmp = temp_init();
 auto ts = ts_init(1848083, "PLUM4SRVWRZJTVHL", "PBAFJJXW26IZ1YFM");
-auto wf = wf_init("real", "12345678");
+auto wf = wf_init("moto", "mangamanga");
 
 void setup() {
   Wire.begin();
   Serial.begin(115200);
-  if (pulse_setup(mx) < 0) {
-    Serial.println("Error setting up pulse ox");
-    STOP;
-  }
-  temp_setup(tmp);
+//  if (pulse_setup(mx) < 0) {
+//    Serial.println("Error setting up pulse ox");
+//    STOP;
+//  }
+//  temp_setup(tmp);
   if (ts_wf_setup(ts, wf) < 0) {
     Serial.println("Error setting up thingspeak and wifi client");
     STOP;

@@ -1,4 +1,5 @@
 #include "tsWifi.h"
+#include "pulseOx.h"
 
 WiFiClient client;
 
@@ -30,6 +31,21 @@ int ts_wf_setup(ts_info ts, wifi_info wf) {
   return 200;
 }
 
-int ts_write(ts_info ts, int field, float sensorData) {
-  return ThingSpeak.writeField(ts.id, field, sensorData, ts.writeKey);
+/*
+ * 1 -> sysBP
+ * 2 -> DiaBP
+ * 3 -> heartRate
+ * 4 -> temp
+ * 5 -> spO2
+ * 6 -> gsr
+ */
+
+int ts_write(ts_info ts, float gsr, pulse_readings pls, float temp) {
+  ThingSpeak.setField(1, pls.sysBP);
+  ThingSpeak.setField(2, pls.diaBP);
+  ThingSpeak.setField(3, pls.heart_rate);
+  ThingSpeak.setField(4, temp);
+  ThingSpeak.setField(5, pls.spO2);
+  ThingSpeak.setField(6, gsr);
+  return ThingSpeak.writeFields(ts.id, ts.writeKey);
 }
