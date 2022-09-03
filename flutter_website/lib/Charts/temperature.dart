@@ -68,6 +68,7 @@ class _TemperatureScreenState extends State<TemperatureScreen> {
           xValueMapper: (EntryModel data, _) => data.createTime,
           yValueMapper: (EntryModel data, _) => data.temperature,
           dataLabelSettings: const DataLabelSettings(isVisible: false),
+          name: "Temperature (C)",
           enableTooltip: true,
         ),
       ],

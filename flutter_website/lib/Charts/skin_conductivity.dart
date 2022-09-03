@@ -44,7 +44,6 @@ class _SkinConductivityScreenState extends State<SkinConductivityScreen> {
 
   void fetchThingSpeakData() async {
     try {
-      print("hello1");
       thingSpeakData.clear();
       final response = await get(thingSpeakURL);
       final jsonData = jsonDecode(response.body)['feeds'];
@@ -69,6 +68,7 @@ class _SkinConductivityScreenState extends State<SkinConductivityScreen> {
           xValueMapper: (EntryModel data, _) => data.createTime,
           yValueMapper: (EntryModel data, _) => data.skinConductivity,
           dataLabelSettings: const DataLabelSettings(isVisible: false),
+          name: "Skin Resistance",
           enableTooltip: true,
         ),
       ],

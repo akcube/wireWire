@@ -68,6 +68,7 @@ class _OxygenScreenState extends State<OxygenScreen> {
           xValueMapper: (EntryModel data, _) => data.createTime,
           yValueMapper: (EntryModel data, _) => data.oxygen,
           dataLabelSettings: const DataLabelSettings(isVisible: false),
+          name: "SpO2 %",
           enableTooltip: true,
         ),
       ],

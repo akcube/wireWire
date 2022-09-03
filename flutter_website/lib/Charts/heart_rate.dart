@@ -68,6 +68,7 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
           xValueMapper: (EntryModel data, _) => data.createTime,
           yValueMapper: (EntryModel data, _) => data.heartRate,
           dataLabelSettings: const DataLabelSettings(isVisible: false),
+          name: "Heart Rate",
           enableTooltip: true,
         ),
       ],

@@ -28,7 +28,7 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
   }
 
   Uri thingSpeakURL = Uri.parse(
-      'https://api.thingspeak.com/channels/${dotenv.env['THINGSPEAK_CHANNEL']!}/feeds.json?');
+      'https://api.thingspeak.com/channels/${dotenv.env['THINGSPEAK_CHANNEL']!}/feeds.json?results=1000');
   List<EntryModel> thingSpeakData = [];
 
   void fetchThingSpeakData() async {
@@ -68,6 +68,7 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
           xValueMapper: (EntryModel data, _) => data.createTime,
           yValueMapper: (EntryModel data, _) => data.systolic,
           dataLabelSettings: const DataLabelSettings(isVisible: false),
+          name: "Systole",
           enableTooltip: true,
         ),
         LineSeries<EntryModel, DateTime>(
@@ -75,6 +76,7 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
           xValueMapper: (EntryModel data, _) => data.createTime,
           yValueMapper: (EntryModel data, _) => data.diastolic,
           dataLabelSettings: const DataLabelSettings(isVisible: false),
+          name: "Diastole",
           enableTooltip: true,
         ),
       ],
