@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter_website/model/entry_model.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
+import 'dart:async';
 
 class SkinConductivityScreen extends StatefulWidget {
-  List<EntryModel> thingSpeakData;
-  SkinConductivityScreen({Key? key, required this.thingSpeakData})
-      : super(key: key);
+  SkinConductivityScreen({Key? key}) : super(key: key);
 
   @override
   _SkinConductivityScreenState createState() => _SkinConductivityScreenState();
@@ -31,6 +33,27 @@ class _SkinConductivityScreenState extends State<SkinConductivityScreen> {
     _tooltipBehavior = TooltipBehavior(enable: true);
     _zoomPanBehavior =
         ZoomPanBehavior(enablePinching: true, enableDoubleTapZooming: true);
+    fetchThingSpeakData();
+    const oneMin = Duration(seconds: 60);
+    Timer.periodic(oneMin, (Timer t) => fetchThingSpeakData());
+  }
+
+  Uri thingSpeakURL = Uri.parse(
+      'https://api.thingspeak.com/channels/${dotenv.env['THINGSPEAK_CHANNEL']!}/feeds.json?');
+  List<EntryModel> thingSpeakData = [];
+
+  void fetchThingSpeakData() async {
+    try {
+      print("hello1");
+      thingSpeakData.clear();
+      final response = await get(thingSpeakURL);
+      final jsonData = jsonDecode(response.body)['feeds'];
+      for (var entry in jsonData) {
+        setState(() {
+          thingSpeakData.add(EntryModel.fromMap(entry));
+        });
+      }
+    } catch (err) {}
   }
 
   Widget SkinConductivityScreen() {
@@ -42,7 +65,7 @@ class _SkinConductivityScreenState extends State<SkinConductivityScreen> {
       zoomPanBehavior: _zoomPanBehavior,
       series: <ChartSeries>[
         LineSeries<EntryModel, DateTime>(
-          dataSource: widget.thingSpeakData,
+          dataSource: thingSpeakData,
           xValueMapper: (EntryModel data, _) => data.createTime,
           yValueMapper: (EntryModel data, _) => data.skinConductivity,
           dataLabelSettings: const DataLabelSettings(isVisible: false),

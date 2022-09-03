@@ -9,8 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 // ignore: must_be_immutable, use_key_in_widget_constructors
 class GridDashboard extends StatelessWidget {
-  final List<EntryModel> thingSpeakData;
-  GridDashboard({Key? key, required this.thingSpeakData}) : super(key: key);
+  GridDashboard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,34 +18,34 @@ class GridDashboard extends StatelessWidget {
         subtitle: "Check BP",
         event: "",
         img: "assets/home/blood.png",
-        route: BloodPressureScreen(thingSpeakData: thingSpeakData));
+        route: BloodPressureScreen());
 
     Items item2 = Items(
         title: "Heart Rate",
         subtitle: "Check your heart rate",
         event: "",
         img: "assets/home/heart.png",
-        route: HeartRateScreen(thingSpeakData: thingSpeakData));
+        route: HeartRateScreen());
 
     Items item3 = Items(
         title: "Temperature",
         subtitle: "Check your temperature",
         event: "",
         img: "assets/home/temperature.png",
-        route: TemperatureScreen(thingSpeakData: thingSpeakData));
+        route: TemperatureScreen());
 
     Items item4 = Items(
         title: "SPO2",
         subtitle: "Check your oxygen levels",
         event: "",
         img: "assets/home/oxygen.png",
-        route: OxygenScreen(thingSpeakData: thingSpeakData));
+        route: OxygenScreen());
     Items item5 = Items(
         title: "Skin Conductivity",
         subtitle: "Check your skin resistance",
         event: "",
         img: "assets/home/resistance.png",
-        route: SkinConductivityScreen(thingSpeakData: thingSpeakData));
+        route: SkinConductivityScreen());
     List<Items> myList = [
       item1,
       item2,

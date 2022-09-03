@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter_website/model/entry_model.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
+import 'dart:async';
 
 class OxygenScreen extends StatefulWidget {
-  List<EntryModel> thingSpeakData;
-  OxygenScreen({Key? key, required this.thingSpeakData}) : super(key: key);
+  OxygenScreen({Key? key}) : super(key: key);
 
   @override
   _OxygenScreenState createState() => _OxygenScreenState();
@@ -30,6 +33,26 @@ class _OxygenScreenState extends State<OxygenScreen> {
     _tooltipBehavior = TooltipBehavior(enable: true);
     _zoomPanBehavior =
         ZoomPanBehavior(enablePinching: true, enableDoubleTapZooming: true);
+    fetchThingSpeakData();
+    const oneMin = Duration(seconds: 60);
+    Timer.periodic(oneMin, (Timer t) => fetchThingSpeakData());
+  }
+
+  Uri thingSpeakURL = Uri.parse(
+      'https://api.thingspeak.com/channels/${dotenv.env['THINGSPEAK_CHANNEL']!}/feeds.json?');
+  List<EntryModel> thingSpeakData = [];
+
+  void fetchThingSpeakData() async {
+    try {
+      thingSpeakData.clear();
+      final response = await get(thingSpeakURL);
+      final jsonData = jsonDecode(response.body)['feeds'];
+      for (var entry in jsonData) {
+        setState(() {
+          thingSpeakData.add(EntryModel.fromMap(entry));
+        });
+      }
+    } catch (err) {}
   }
 
   Widget OxygenScreen() {
@@ -41,7 +64,7 @@ class _OxygenScreenState extends State<OxygenScreen> {
       zoomPanBehavior: _zoomPanBehavior,
       series: <ChartSeries>[
         LineSeries<EntryModel, DateTime>(
-          dataSource: widget.thingSpeakData,
+          dataSource: thingSpeakData,
           xValueMapper: (EntryModel data, _) => data.createTime,
           yValueMapper: (EntryModel data, _) => data.oxygen,
           dataLabelSettings: const DataLabelSettings(isVisible: false),
