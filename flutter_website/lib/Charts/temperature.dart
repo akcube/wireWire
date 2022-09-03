@@ -44,7 +44,6 @@ class _TemperatureScreenState extends State<TemperatureScreen> {
 
   void fetchThingSpeakData() async {
     try {
-      print("hello1");
       thingSpeakData.clear();
       final response = await get(thingSpeakURL);
       final jsonData = jsonDecode(response.body)['feeds'];
