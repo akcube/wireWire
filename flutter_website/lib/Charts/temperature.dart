@@ -39,7 +39,7 @@ class _TemperatureScreenState extends State<TemperatureScreen> {
   }
 
   Uri thingSpeakURL = Uri.parse(
-      'https://api.thingspeak.com/channels/${dotenv.env['THINGSPEAK_CHANNEL']!}/feeds.json?');
+      'https://api.thingspeak.com/channels/${dotenv.env['THINGSPEAK_CHANNEL']!}/feeds.json?results=1000');
   List<EntryModel> thingSpeakData = [];
 
   void fetchThingSpeakData() async {
