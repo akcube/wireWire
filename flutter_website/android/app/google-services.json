@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "98666196833",
+    "project_id": "wirewire-77171",
+    "storage_bucket": "wirewire-77171.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:98666196833:android:5622e7ff73d07eb36c1f20",
+        "android_client_info": {
+          "package_name": "com.example.flutter_website"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "98666196833-fhp70nr24ciur7phla739nfvfkgtiae9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHKj2CmtOgofd13CdP1cSAVqcV8akUBh8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "98666196833-fhp70nr24ciur7phla739nfvfkgtiae9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
