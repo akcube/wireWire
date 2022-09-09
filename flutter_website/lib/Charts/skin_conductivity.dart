@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_website/model/user_model.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter_website/model/entry_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -16,6 +19,8 @@ class SkinConductivityScreen extends StatefulWidget {
 class _SkinConductivityScreenState extends State<SkinConductivityScreen> {
   late TooltipBehavior _tooltipBehavior;
   late ZoomPanBehavior _zoomPanBehavior;
+  User? user = FirebaseAuth.instance.currentUser;
+  UserModel loggedInUser = UserModel();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,17 +38,25 @@ class _SkinConductivityScreenState extends State<SkinConductivityScreen> {
     _tooltipBehavior = TooltipBehavior(enable: true);
     _zoomPanBehavior =
         ZoomPanBehavior(enablePinching: true, enableDoubleTapZooming: true);
-    fetchThingSpeakData();
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(user!.uid)
+        .get()
+        .then((value) {
+      loggedInUser = UserModel.fromMap(value.data());
+      fetchThingSpeakData();
+      setState(() {});
+    });
     const oneMin = Duration(seconds: 60);
     Timer.periodic(oneMin, (Timer t) => fetchThingSpeakData());
   }
 
-  Uri thingSpeakURL = Uri.parse(
-      'https://api.thingspeak.com/channels/${dotenv.env['THINGSPEAK_CHANNEL']!}/feeds.json?results=1000');
   List<EntryModel> thingSpeakData = [];
 
   void fetchThingSpeakData() async {
     try {
+      Uri thingSpeakURL = Uri.parse(
+          'https://api.thingspeak.com/channels/${loggedInUser.thingSpeakChannel ?? 0}/feeds.json?results=1000');
       thingSpeakData.clear();
       final response = await get(thingSpeakURL);
       final jsonData = jsonDecode(response.body)['feeds'];

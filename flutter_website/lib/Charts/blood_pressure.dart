@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_website/model/user_model.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:flutter_website/model/entry_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -16,6 +19,27 @@ class BloodPressureScreen extends StatefulWidget {
 class _BloodPressureScreenState extends State<BloodPressureScreen> {
   late TooltipBehavior _tooltipBehavior;
   late ZoomPanBehavior _zoomPanBehavior;
+  User? user = FirebaseAuth.instance.currentUser;
+  UserModel loggedInUser = UserModel();
+  @override
+  void initState() {
+    super.initState();
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(user!.uid)
+        .get()
+        .then((value) {
+      loggedInUser = UserModel.fromMap(value.data());
+      setState(() {});
+      fetchThingSpeakData();
+    });
+    _tooltipBehavior = TooltipBehavior(enable: true);
+    _zoomPanBehavior =
+        ZoomPanBehavior(enablePinching: true, enableDoubleTapZooming: true);
+    const oneMin = Duration(seconds: 60);
+    Timer.periodic(oneMin, (Timer t) => fetchThingSpeakData());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,12 +51,13 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
     );
   }
 
-  Uri thingSpeakURL = Uri.parse(
-      'https://api.thingspeak.com/channels/${dotenv.env['THINGSPEAK_CHANNEL']!}/feeds.json?results=1000');
   List<EntryModel> thingSpeakData = [];
 
   void fetchThingSpeakData() async {
     try {
+      Uri thingSpeakURL = Uri.parse(
+          'https://api.thingspeak.com/channels/${loggedInUser.thingSpeakChannel ?? 0}/feeds.json?results=1000');
+
       thingSpeakData.clear();
       final response = await get(thingSpeakURL);
       final jsonData = jsonDecode(response.body)['feeds'];
@@ -42,17 +67,6 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
         });
       }
     } catch (err) {}
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _tooltipBehavior = TooltipBehavior(enable: true);
-    _zoomPanBehavior =
-        ZoomPanBehavior(enablePinching: true, enableDoubleTapZooming: true);
-    const oneMin = Duration(seconds: 60);
-    fetchThingSpeakData();
-    Timer.periodic(oneMin, (Timer t) => fetchThingSpeakData());
   }
 
   Widget BloodPressureChart() {
