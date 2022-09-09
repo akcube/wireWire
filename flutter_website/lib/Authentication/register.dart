@@ -71,7 +71,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 color: Colors.black,
               ),
             ),
-            prefixIcon: const Icon(Icons.account_circle),
+            prefixIcon: const Icon(Icons.auto_graph),
             hintText: "Thingspeak Channel",
             hintStyle: const TextStyle(color: Colors.white),
             border: OutlineInputBorder(
@@ -226,96 +226,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(
-                          left: 35, right: 35, bottom: 20),
-                      alignment: Alignment.center,
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: Center(
-                          child: ToggleButtons(
-                            onPressed: (int index) {
-                              setState(() {
-                                if (index == 0) {
-                                  memColor = Colors.amber;
-                                  manColor = Colors.white;
-                                } else {
-                                  memColor = Colors.white;
-                                  manColor = Colors.amber;
-                                }
-                                for (int buttonIndex = 0;
-                                    buttonIndex < isSelected.length;
-                                    buttonIndex++) {
-                                  if (buttonIndex == index) {
-                                    isSelected[buttonIndex] = true;
-                                  } else {
-                                    isSelected[buttonIndex] = false;
-                                  }
-                                }
-                              });
-                            },
-                            isSelected: isSelected,
-                            fillColor: Colors.white,
-                            selectedColor: Colors.orange,
-                            color: Colors.pink,
-                            children: <Widget>[
-                              Row(
-                                children: [
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  IconButton(
-                                      onPressed: (() => {}),
-                                      icon: FaIcon(
-                                        FontAwesomeIcons.person,
-                                        color: memColor,
-                                      )),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    'Member',
-                                    style: TextStyle(
-                                        color: memColor,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  const SizedBox(
-                                    width: 30,
-                                  )
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  IconButton(
-                                      onPressed: (() => {}),
-                                      icon: FaIcon(
-                                        FontAwesomeIcons.peopleRoof,
-                                        color: manColor,
-                                      )),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    'Manager',
-                                    style: TextStyle(
-                                        color: manColor,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  const SizedBox(
-                                    width: 30,
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
                       margin: const EdgeInsets.only(left: 35, right: 35),
                       child: Form(
                         key: _formKey,
@@ -336,23 +246,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             thingSpeakChannelField,
                             const SizedBox(
                               height: 30,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Flexible(
-                                  child: Text(
-                                    loc,
-                                    style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 40,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -420,10 +313,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       try {
         await _auth
             .createUserWithEmailAndPassword(email: email, password: password)
-            .then((value) => {postDetailsToFirestore()})
-            .catchError((e) {
-          Fluttertoast.showToast(msg: e!.message);
-        });
+            .then((value) => {postDetailsToFirestore()});
       } on FirebaseAuthException catch (error) {
         switch (error.code) {
           case "invalid-email":
