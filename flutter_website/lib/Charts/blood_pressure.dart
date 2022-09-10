@@ -54,15 +54,16 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
 
   void fetchThingSpeakData() async {
     try {
+      print(loggedInUser.thingSpeakChannel);
       Uri thingSpeakURL = Uri.parse(
           'https://api.thingspeak.com/channels/${loggedInUser.thingSpeakChannel ?? 0}/feeds.json?results=1000');
-
       thingSpeakData.clear();
       final response = await get(thingSpeakURL);
       final jsonData = jsonDecode(response.body)['feeds'];
       for (var entry in jsonData) {
         setState(() {
-          thingSpeakData.add(EntryModel.fromMap(entry));
+          EntryModel data = EntryModel.fromMap(entry);
+          if (!data.isErroneousDataPoint()) thingSpeakData.add(data);
         });
       }
     } catch (err) {}

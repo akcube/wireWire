@@ -61,7 +61,8 @@ class _TemperatureScreenState extends State<TemperatureScreen> {
       final jsonData = jsonDecode(response.body)['feeds'];
       for (var entry in jsonData) {
         setState(() {
-          thingSpeakData.add(EntryModel.fromMap(entry));
+          EntryModel data = EntryModel.fromMap(entry);
+          if (!data.isErroneousDataPoint()) thingSpeakData.add(data);
         });
       }
     } catch (err) {}

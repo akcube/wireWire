@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'package:flutter/material.dart';
-
 class EntryModel {
   DateTime? createTime;
   int? entryId;
@@ -40,5 +37,26 @@ class EntryModel {
       'oxygen': oxygen,
       'skinConductivity': skinConductivity,
     };
+  }
+
+  bool isErroneousDataPoint() {
+    return entryId! <= 0 || // entryId is not valid
+        systolic! <= 0 ||
+        systolic! >= 180 || // systolic is not valid
+
+        diastolic! <= 0 ||
+        diastolic! >= 150 || // diastolic is not valid
+
+        heartRate! <= 0 ||
+        heartRate! >= 200 || // heartRate is not valid
+
+        temperature! <= -20 ||
+        temperature! >= 55 || // temperature is not valid
+
+        oxygen! <= 0 ||
+        oxygen! > 100 || // oxygen is not valid
+
+        skinConductivity! <= 0 ||
+        skinConductivity! >= 150000; // skinConductivity is not valid
   }
 }
