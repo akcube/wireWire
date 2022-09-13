@@ -33,8 +33,11 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
       fetchThingSpeakData();
     });
     _tooltipBehavior = TooltipBehavior(enable: true);
-    _zoomPanBehavior =
-        ZoomPanBehavior(enablePinching: true, enableDoubleTapZooming: true);
+    _zoomPanBehavior = ZoomPanBehavior(
+        enablePinching: true,
+        enableDoubleTapZooming: true,
+        enablePanning: true,
+        enableMouseWheelZooming: true);
     const oneMin = Duration(seconds: 60);
     Timer.periodic(oneMin, (Timer t) => fetchThingSpeakData());
   }

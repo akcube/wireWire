@@ -35,8 +35,11 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
   void initState() {
     super.initState();
     _tooltipBehavior = TooltipBehavior(enable: true);
-    _zoomPanBehavior =
-        ZoomPanBehavior(enablePinching: true, enableDoubleTapZooming: true);
+    _zoomPanBehavior = ZoomPanBehavior(
+        enablePinching: true,
+        enableDoubleTapZooming: true,
+        enablePanning: true,
+        enableMouseWheelZooming: true);
     FirebaseFirestore.instance
         .collection("users")
         .doc(user!.uid)
