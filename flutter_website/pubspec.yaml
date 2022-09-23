@@ -37,10 +37,15 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_dotenv: ^5.0.2
+  flutter_local_notifications: ^9.9.1
+  flutter_native_timezone: ^2.0.0
   fluttertoast: ^8.0.9
   font_awesome_flutter: ^10.1.0
   google_fonts: ^3.0.1
   http: ^0.13.5
+  intl: ^0.17.0
+  path_provider: ^2.0.11
+  rxdart: ^0.27.5
   syncfusion_flutter_charts: ^20.2.46
 
 dev_dependencies:

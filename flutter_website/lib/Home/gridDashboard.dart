@@ -4,13 +4,16 @@ import 'package:flutter_website/Charts/heart_rate.dart';
 import 'package:flutter_website/Charts/oxygen.dart';
 import 'package:flutter_website/Charts/skin_conductivity.dart';
 import 'package:flutter_website/Charts/temperature.dart';
-import 'package:flutter_website/model/entry_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // ignore: must_be_immutable, use_key_in_widget_constructors
-class GridDashboard extends StatelessWidget {
-  GridDashboard({Key? key}) : super(key: key);
+class GridDashboard extends StatefulWidget {
+  const GridDashboard({Key? key}) : super(key: key);
+  @override
+  _GridDashboardState createState() => _GridDashboardState();
+}
 
+class _GridDashboardState extends State<GridDashboard> {
   @override
   Widget build(BuildContext context) {
     Items item1 = Items(
