@@ -65,8 +65,6 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
           separateRecordings[currSession].map((e) => e.diastolic!).average;
       sessionDataDia = [a1!, b1!, c1];
     });
-    print(sessionDataDia);
-    print(sessionDataSys);
   }
 
   @override
@@ -139,9 +137,6 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
         } else
           separateRecordings = temp2;
       });
-      for (var x in separateRecordings) {
-        print(x.length);
-      }
       updateStats();
       if (thingSpeakData.last.createTime!.isAfter(lastEntry)) {
         lastEntry = thingSpeakData.last.createTime!;
@@ -175,15 +170,15 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
                       color: Colors.blue),
                 ),
                 Text(
-                  "Min: ${sessionDataSys[0].toStringAsFixed(0)}",
+                  "Min: ${sessionDataSys[0].toStringAsFixed(2)}",
                   style: TextStyle(fontSize: 15, color: Colors.blue),
                 ),
                 Text(
-                  "Max: ${sessionDataSys[1].toStringAsFixed(0)}",
+                  "Max: ${sessionDataSys[1].toStringAsFixed(2)}",
                   style: TextStyle(fontSize: 15, color: Colors.blue),
                 ),
                 Text(
-                  "Avg: ${sessionDataSys[2].toStringAsFixed(0)}",
+                  "Avg: ${sessionDataSys[2].toStringAsFixed(2)}",
                   style: TextStyle(fontSize: 15, color: Colors.blue),
                 ),
               ],
@@ -198,15 +193,15 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
                       color: Colors.red),
                 ),
                 Text(
-                  "Min: ${sessionDataDia[0].toStringAsFixed(0)}",
+                  "Min: ${sessionDataDia[0].toStringAsFixed(2)}",
                   style: TextStyle(fontSize: 15, color: Colors.red),
                 ),
                 Text(
-                  "Max: ${sessionDataDia[1].toStringAsFixed(0)}",
+                  "Max: ${sessionDataDia[1].toStringAsFixed(2)}",
                   style: TextStyle(fontSize: 15, color: Colors.red),
                 ),
                 Text(
-                  "Avg: ${sessionDataDia[2].toStringAsFixed(0)}",
+                  "Avg: ${sessionDataDia[2].toStringAsFixed(2)}",
                   style: TextStyle(fontSize: 15, color: Colors.red),
                 ),
               ],
@@ -247,7 +242,7 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
               child: const Icon(Icons.arrow_back_ios), // icon
             ),
             Text(
-              "Entry: $currSession/${separateRecordings.length - 1}\n",
+              "Entry: $currSession/${separateRecordings.length - 1}",
               style: const TextStyle(fontSize: 20),
             ),
             InkWell(
