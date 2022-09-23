@@ -1,3 +1,6 @@
+import 'dart:core';
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +12,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'dart:math';
 import 'package:intl/intl.dart';
-
+import 'package:collection/collection.dart';
 import '../notification_service.dart';
 
 class BloodPressureScreen extends StatefulWidget {
@@ -25,11 +28,46 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
   DateTime lastEntry = DateTime(1999, 1, 1); // Some old date
-  int currentSession = 10;
+  int currentSession = 0;
+  // Min, Max, Avg
+  List<double> sessionDataSys = [0.0, 0.0, 0.0];
+  List<double> sessionDataDia = [0.0, 0.0, 0.0];
 
   late final NotificationService notificationService;
   void listenToNotificationStream() =>
       notificationService.behaviorSubject.listen((payload) {});
+
+  void updateStats() {
+    int currSession =
+        [currentSession, separateRecordings.length - 1].reduce(min);
+    setState(() {
+      double? a = (separateRecordings[currSession].map((e) => e.systolic))
+          .reduce((a, b) {
+        return min(a!, b!);
+      });
+      double? b = (separateRecordings[currSession].map((e) => e.systolic))
+          .reduce((a, b) {
+        return max(a!, b!);
+      });
+      double? c =
+          separateRecordings[currSession].map((e) => e.systolic!).average;
+      sessionDataSys = [a!, b!, c];
+
+      double? a1 = (separateRecordings[currSession].map((e) => e.diastolic))
+          .reduce((a, b) {
+        return min(a!, b!);
+      });
+      double? b1 = (separateRecordings[currSession].map((e) => e.diastolic))
+          .reduce((a, b) {
+        return max(a!, b!);
+      });
+      double? c1 =
+          separateRecordings[currSession].map((e) => e.diastolic!).average;
+      sessionDataDia = [a1!, b1!, c1];
+    });
+    print(sessionDataDia);
+    print(sessionDataSys);
+  }
 
   @override
   void initState() {
@@ -76,7 +114,7 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
       Uri thingSpeakURL = Uri.parse(
           'https://api.thingspeak.com/channels/${loggedInUser.thingSpeakChannel ?? 0}/feeds.json?results=1000');
       thingSpeakData.clear();
-      List<List<EntryModel>> temp2 = [[]];
+      List<List<EntryModel>> temp2 = [];
       DateTime previousEntry = DateTime(1999, 1, 1); // Some old date
       final response = await get(thingSpeakURL);
       final jsonData = jsonDecode(response.body)['feeds'];
@@ -95,8 +133,16 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
       }
       temp2.add(temp);
       setState(() {
-        separateRecordings = temp2;
+        currentSession = temp2.length - 1;
+        if (temp2.length == 0) {
+          separateRecordings = [[]];
+        } else
+          separateRecordings = temp2;
       });
+      for (var x in separateRecordings) {
+        print(x.length);
+      }
+      updateStats();
       if (thingSpeakData.last.createTime!.isAfter(lastEntry)) {
         lastEntry = thingSpeakData.last.createTime!;
         //   notificationService.showLocalNotification(
@@ -110,10 +156,65 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
 
   String timeStamp(DateTime now) {
     String date = DateFormat('MMM dd HH:mm').format(now);
-    String convertedDateTime =
-        "${now.year.toString()}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')} ${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}";
-    // return convertedDateTime;
     return date;
+  }
+
+  Widget statsWidget() {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Column(
+              children: [
+                const Text(
+                  "Systolic",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue),
+                ),
+                Text(
+                  "Min: ${sessionDataSys[0].toStringAsFixed(0)}",
+                  style: TextStyle(fontSize: 15, color: Colors.blue),
+                ),
+                Text(
+                  "Max: ${sessionDataSys[1].toStringAsFixed(0)}",
+                  style: TextStyle(fontSize: 15, color: Colors.blue),
+                ),
+                Text(
+                  "Avg: ${sessionDataSys[2].toStringAsFixed(0)}",
+                  style: TextStyle(fontSize: 15, color: Colors.blue),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                const Text(
+                  "Diastolic",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red),
+                ),
+                Text(
+                  "Min: ${sessionDataDia[0].toStringAsFixed(0)}",
+                  style: TextStyle(fontSize: 15, color: Colors.red),
+                ),
+                Text(
+                  "Max: ${sessionDataDia[1].toStringAsFixed(0)}",
+                  style: TextStyle(fontSize: 15, color: Colors.red),
+                ),
+                Text(
+                  "Avg: ${sessionDataDia[2].toStringAsFixed(0)}",
+                  style: TextStyle(fontSize: 15, color: Colors.red),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
   }
 
   Widget BloodPressureChart() {
@@ -141,11 +242,12 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
                 setState(() {
                   currentSession = [currentSession - 1, 1].reduce(max);
                 });
+                updateStats();
               }, // button pressed
               child: const Icon(Icons.arrow_back_ios), // icon
             ),
             Text(
-              "Entry: $currSession/${separateRecordings.length - 1}",
+              "Entry: $currSession/${separateRecordings.length - 1}\n",
               style: const TextStyle(fontSize: 20),
             ),
             InkWell(
@@ -156,11 +258,21 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
                     separateRecordings.length - 1
                   ].reduce(min);
                 });
+                updateStats();
               }, // button pressed
               child: const Icon(Icons.arrow_forward_ios), // icon
             ),
           ],
         ),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   children: [
+        //     Text(
+        //       title,
+        //       style: const TextStyle(fontSize: 20),
+        //     ),
+        //   ],
+        // ),
         SfCartesianChart(
           title: ChartTitle(text: title),
           legend: Legend(
@@ -188,7 +300,8 @@ class _BloodPressureScreenState extends State<BloodPressureScreen> {
           primaryXAxis: DateTimeAxis(),
           primaryYAxis:
               NumericAxis(edgeLabelPlacement: EdgeLabelPlacement.shift),
-        )
+        ),
+        statsWidget(),
       ],
     );
   }
