@@ -3,7 +3,9 @@ import 'package:flutter_website/Charts/blood_pressure.dart';
 import 'package:flutter_website/Charts/heart_rate.dart';
 import 'package:flutter_website/Charts/oxygen.dart';
 import 'package:flutter_website/Charts/skin_conductivity.dart';
+import 'package:flutter_website/Home/gridDashboardStats.dart';
 import 'package:flutter_website/Charts/temperature.dart';
+import 'package:flutter_website/Home/homeStats.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // ignore: must_be_immutable, use_key_in_widget_constructors
@@ -49,12 +51,19 @@ class _GridDashboardState extends State<GridDashboard> {
         event: "",
         img: "assets/home/resistance.png",
         route: SkinConductivityScreen());
+    Items item6 = Items(
+        title: "Current Readings",
+        subtitle: "See how you're doing right now",
+        event: "",
+        img: "assets/home/read.png",
+        route: HomePageStats());
     List<Items> myList = [
       item1,
       item2,
       item3,
       item4,
       item5,
+      item6,
     ];
     var color = 0xff453658;
     return Flexible(
