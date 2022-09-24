@@ -137,6 +137,7 @@ class _HeartRateScreenState extends State<HeartRateScreen> {
   }
 
   String timeStamp(DateTime now) {
+    now = now.add(const Duration(hours: 5, minutes: 30));
     String date = DateFormat('MMM dd HH:mm').format(now);
     return date;
   }
